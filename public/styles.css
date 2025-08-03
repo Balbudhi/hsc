@@ -123,10 +123,13 @@ body {
   z-index: -1;
 }
 
+
+
 #website-content {
   z-index: 10;
   display: block;
-  font-size: 1.1vw;
+  font-size: clamp(14px, 1.1vw, 18px);
+  /* Responsive font scaling with limits */
 }
 
 #content {
@@ -237,7 +240,8 @@ a:link {
 
 #menus>ul {
   display: flex;
-  font-size: 1.1vw;
+  font-size: 16px;
+  /* Fixed readable size */
   clear: left;
   float: left;
   list-style: none;
@@ -363,55 +367,151 @@ table img {
   font-family: 'Tiro Devanagari Sanskrit', serif;
 }
 
-@media all and (max-width: 1000px) {
-  #website-content {
-    width: 100%;
-    font-size: 1.125em;
-  }
-
+/* Simplified responsive design */
+@media all and (max-width: 1024px) {
   #content {
-    width: 93%;
-    padding: calc(10vh + 110px) 50px 16px 80px;
-  }
-
-  .page>p {
-    line-height: 1.5;
-    font-size: 1.125em;
-  }
-
-  #menus>ul {
-    font-size: 34px;
-  }
-
-  #front-page>#title-logo {
-    bottom: 15%;
-  }
-
-  .arrow {
-    bottom: 5%;
-  }
-
-  #om-loader {
-    font-size: 5em;
-  }
-
-  #loader {
-    width: 300px;
-    height: 300px;
-    margin: -150px 0 0 -150px;
-  }
-
-  table {
-    font-size: 1.8em;
-    border-spacing: 10px 3vh;
+    width: 95%;
+    padding: calc(10vh + 60px) 30px 16px 50px;
   }
 
   .circular--portrait {
-    width: 250px;
-    height: 250px;
+    width: clamp(150px, 20vw, 200px);
+    height: clamp(150px, 20vw, 200px);
+  }
+}
+
+/* Mobile styles - conservative approach */
+@media all and (max-width: 768px) {
+  #website-content {
+    font-size: 14px;
+    /* Fixed small base */
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 
-  a.anchor {
-    top: -130px;
+  #content {
+    width: 95%;
+    max-width: calc(100vw - 20px);
+    padding: calc(10vh + 40px) 10px 16px 10px;
+    box-sizing: border-box;
+  }
+
+  .page>p {
+    font-size: 16px;
+    /* Fixed readable paragraph size */
+    line-height: 1.5;
+  }
+
+  .page>h1 {
+    font-size: 24px;
+    /* Fixed heading sizes */
+  }
+
+  .page>h2 {
+    font-size: 20px;
+  }
+
+  .circular--portrait {
+    width: 100px;
+    height: 100px;
+  }
+
+  #menus>ul {
+    font-size: 12px; /* Even smaller for better mobile wrapping */
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3px;
+    padding: 0 5px;
+  }
+
+  #menus>ul>li {
+    margin: 0 2px;
+    line-height: 1.2;
+  }
+
+  table {
+    font-size: 12px; /* Smaller for mobile readability */
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  table td {
+    padding: 6px;
+    text-align: center;
+    vertical-align: top;
+    word-wrap: break-word;
+  }
+
+  table th {
+    padding: 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 11px;
+  }
+
+  .sanskrit-text {
+    font-size: 15px;
+    /* Slightly smaller Sanskrit text */
+    line-height: 1.5;
+  }
+
+  /* Improve mobile spacing and fix image layout */
+  .page {
+    margin-bottom: 20px;
+    padding: 0 5px;
+  }
+
+  /* Fix photo gallery layout on mobile */
+  .circular--portrait {
+    display: block;
+    margin: 5px auto;
+  }
+}
+
+/* Very small screens - prevent clipping */
+@media all and (max-width: 480px) {
+  #content {
+    padding: calc(10vh + 30px) 8px 16px 8px;
+    max-width: calc(100vw - 16px);
+  }
+
+  .circular--portrait {
+    width: 70px;
+    height: 70px;
+  }
+
+  /* Smaller table fonts for very small screens */
+  table {
+    font-size: 10px;
+  }
+
+  table th {
+    font-size: 9px;
+    padding: 3px;
+  }
+
+  table td {
+    padding: 3px;
+  }
+
+  /* Better photo gallery layout for small screens */
+  #PHOTOS table td {
+    width: 33.33%;
+    padding: 2px;
+  }
+
+  /* Stack officer tables vertically on very small screens */
+  #OFFICERS table tr {
+    display: block;
+    margin-bottom: 1em;
+    text-align: center;
+  }
+
+  #OFFICERS table td {
+    display: block;
+    padding: 3px 0;
+    font-size: 11px;
   }
 }

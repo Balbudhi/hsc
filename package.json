@@ -11,9 +11,9 @@
   },
   "scripts": {
     "dev": "webpack --mode=development",
-    "build": "node scripts/enhanced-build.js",
+    "build": "webpack --mode=production",
+    "build-enhanced": "node scripts/enhanced-build.js",
     "build-old": "node scripts/build.js",
-    "watch": "chokidar \"content/**/*.{md,json}\" -c \"npm run build\"",
     "start": "node web_scripts/server.js",
     "deploy": "./scripts/deploy.sh",
     "deploy:manual": "echo 'SSH to MIT: ssh athena.dialup.mit.edu, then: cd /mit/hsc/www && git pull'"

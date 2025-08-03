@@ -1,12 +1,14 @@
-name: Deploy to MIT Web
+name: Build and Validate
 
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     
     steps:
@@ -21,54 +23,22 @@ jobs:
     - name: Install dependencies
       run: npm install
     
-    - name: Build project
+    - name: Build JavaScript bundle
       run: npm run build
     
-    - name: Deploy to MIT AFS
-      env:
-        MIT_USERNAME: ${{ secrets.MIT_USERNAME }}
-        MIT_PASSWORD: ${{ secrets.MIT_PASSWORD }}
+    - name: Validate HTML
       run: |
-        # Install sshpass for automated SSH
-        sudo apt-get update && sudo apt-get install -y sshpass
-        
-        # Create deployment script
-        cat > deploy.sh << 'EOF'
-        #!/bin/bash
-        set -e
-        
-        # Connect to athena and deploy
-        sshpass -p "$MIT_PASSWORD" ssh -o StrictHostKeyChecking=no "$MIT_USERNAME@athena.dialup.mit.edu" << 'REMOTE_EOF'
-        cd /mit/hsc/www
-        
-        # Backup current version
-        if [ -d "backup" ]; then rm -rf backup; fi
-        mkdir backup
-        cp -r * backup/ 2>/dev/null || true
-        
-        # Clone/pull from GitHub
-        if [ -d ".git" ]; then
-          git pull origin main
-        else
-          git clone https://github.com/$GITHUB_REPOSITORY.git .
+        # Simple validation that index.html exists and has basic structure
+        if [ ! -f "public/index.html" ]; then
+          echo "Error: public/index.html not found!"
+          exit 1
         fi
         
-        # Install dependencies and build if needed
-        if [ -f "package.json" ]; then
-          npm install
-          npm run build 2>/dev/null || true
+        # Check for basic HTML structure
+        if ! grep -q "<html" public/index.html; then
+          echo "Error: public/index.html appears to be invalid!"
+          exit 1
         fi
         
-        # Copy public files to web directory
-        cp -r public/* .
-        
-        # Set proper permissions
-        fs sa . system:anyuser rl
-        fs sa . www:apache rl
-        
-        echo "Deployment complete!"
-        REMOTE_EOF
-        EOF
-        
-        chmod +x deploy.sh
-        ./deploy.sh
+        echo "✅ Website files validated successfully!"
+        echo "📝 To deploy to MIT: ssh athena.dialup.mit.edu, then cd /mit/hsc/www && git pull"
