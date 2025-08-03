@@ -1,33 +1,35 @@
 # MIT Hindu Students Council Website
 
-Interactive website with 3D animations and lightbox galleries.
+Professional website template with 3D animations, responsive design, and lightbox galleries. Designed for HSC chapters and student organizations.
 
-## Setup
+## Quick Start
 
+### Local Development
 ```bash
 npm install
 npm start
 ```
-
 Visit: http://localhost:3000
 
-## Content Updates
+### Live Deployment
+Website is hosted at: `http://web.mit.edu/hsc/www/`
 
-All content is in `public/index.html`. Edit directly and refresh browser.
+## Content Management
 
-### Text Content
+### Editing Content
+All website content is stored in `public/index.html`. Edit sections directly:
 
-**MIT HSC Info:** Lines 65-95  
-**Chaplain:** Lines 97-125  
-**Events:** Lines 130-210  
-**Photos:** Lines 215-275  
-**Officers:** Lines 280-330  
+- **Organization Info:** Lines 65-95
+- **Chaplain Information:** Lines 97-125  
+- **Events:** Lines 130-210
+- **Photo Gallery:** Lines 215-275
+- **Officers & Contact:** Lines 280-330
 
-### Adding Images
+### Adding New Content
 
-#### Officers
-1. Add image: `public/assets/profile_pictures/name.jpg`
-2. Add table row around line 290:
+#### Officer Profiles
+1. Add image to `public/assets/profile_pictures/`
+2. Insert table row (around line 290):
 ```html
 <tr>
     <td><div class="circular--portrait"><img src="assets/profile_pictures/name.jpg" alt="Name"></div></td>
@@ -37,9 +39,9 @@ All content is in `public/index.html`. Edit directly and refresh browser.
 </tr>
 ```
 
-#### Events (with popup)
-1. Add poster: `public/assets/event_posters/event.png`
-2. Add table row around line 140:
+#### Event Listings
+1. Add poster to `public/assets/event_posters/`
+2. Add table entry (around line 140):
 ```html
 <tr>
     <td><div class="circular--portrait"><a href="#poster8"><img src="assets/event_posters/event.png" alt="Event"></a></div></td>
@@ -48,7 +50,7 @@ All content is in `public/index.html`. Edit directly and refresh browser.
     <td>Description</td>
 </tr>
 ```
-3. Add popup at end around line 460:
+3. Add lightbox popup (around line 460):
 ```html
 <div id="poster8" class="lightbox">
     <a href="#" class="backdrop"></a>
@@ -57,13 +59,13 @@ All content is in `public/index.html`. Edit directly and refresh browser.
 </div>
 ```
 
-#### Photos (with popup)
-1. Add photo: `public/assets/photos/photo.jpg`
-2. Add to table around line 230:
+#### Photo Gallery
+1. Add photo to `public/assets/photos/`
+2. Add to gallery table (around line 230):
 ```html
 <td><div class="circular--portrait"><a href="#lightbox10"><img src="assets/photos/photo.jpg" alt="Description"></a></div></td>
 ```
-3. Add popup at end around line 380:
+3. Add lightbox modal (around line 380):
 ```html
 <div id="lightbox10" class="lightbox">
     <a href="#" class="backdrop"></a>
@@ -72,22 +74,55 @@ All content is in `public/index.html`. Edit directly and refresh browser.
 </div>
 ```
 
-### Key Points
+## Publishing Updates
 
-- Wrap images in `<div class="circular--portrait">` for circular styling
-- Lightbox IDs must be unique (lightbox1, lightbox2, poster1, poster2...)
-- Save file and refresh browser to see changes
-- Keep `public/index.backup.html` as backup
+### Deploy to MIT Server
+```bash
+# Copy files to MIT web server
+scp -r public/* [username]@athena.dialup.mit.edu:/mit/hsc/www/
+
+# Set permissions via SSH
+ssh [username]@athena.dialup.mit.edu
+cd /mit/hsc/www
+fs sa . system:anyuser rl
+fs sa . www:apache rl
+```
+
+*Replace `[username]` with your MIT Kerberos ID*
+
+### Verification
+Test deployment: `curl -I http://web.mit.edu/hsc/www/`
+
+## Template Usage
+
+This website template is available for any Hindu Students Council chapter. To adapt:
+
+1. Fork this repository
+2. Update content in `public/index.html`
+3. Replace images in `public/assets/`
+4. Deploy to your institution's web hosting
+
+### Key Features
+- Mobile-responsive design
+- 3D Shivling animation with volumetric lighting
+- Lightbox image galleries
+- Professional layout optimized for student organizations
+
+## Technical Notes
+
+- Images in `<div class="circular--portrait">` display as circles
+- Unique lightbox IDs required (lightbox1, poster1, etc.)
+- Keep `public/index.backup.html` as restore point
+- Mobile-optimized with viewport constraints
 
 ## File Structure
-
 ```
 public/
 ├── index.html          # Main content
-├── styles.css          # Styling
+├── styles.css          # Styling & responsive design
 ├── lightbox.css        # Image popup styling
-├── lightbox.js         # Image popup behavior
-├── main.js             # 3D engine
+├── lightbox.js         # Popup behavior
+├── main.js             # 3D animation engine
 └── assets/
     ├── profile_pictures/
     ├── event_posters/
@@ -95,5 +130,4 @@ public/
 ```
 
 ## License
-
-MIT License
+MIT License - Free for educational and organizational use
