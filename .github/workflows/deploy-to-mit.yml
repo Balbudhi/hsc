@@ -1,0 +1,74 @@
+name: Deploy to MIT Web
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm install
+    
+    - name: Build project
+      run: npm run build
+    
+    - name: Deploy to MIT AFS
+      env:
+        MIT_USERNAME: ${{ secrets.MIT_USERNAME }}
+        MIT_PASSWORD: ${{ secrets.MIT_PASSWORD }}
+      run: |
+        # Install sshpass for automated SSH
+        sudo apt-get update && sudo apt-get install -y sshpass
+        
+        # Create deployment script
+        cat > deploy.sh << 'EOF'
+        #!/bin/bash
+        set -e
+        
+        # Connect to athena and deploy
+        sshpass -p "$MIT_PASSWORD" ssh -o StrictHostKeyChecking=no "$MIT_USERNAME@athena.dialup.mit.edu" << 'REMOTE_EOF'
+        cd /mit/hsc/www
+        
+        # Backup current version
+        if [ -d "backup" ]; then rm -rf backup; fi
+        mkdir backup
+        cp -r * backup/ 2>/dev/null || true
+        
+        # Clone/pull from GitHub
+        if [ -d ".git" ]; then
+          git pull origin main
+        else
+          git clone https://github.com/$GITHUB_REPOSITORY.git .
+        fi
+        
+        # Install dependencies and build if needed
+        if [ -f "package.json" ]; then
+          npm install
+          npm run build 2>/dev/null || true
+        fi
+        
+        # Copy public files to web directory
+        cp -r public/* .
+        
+        # Set proper permissions
+        fs sa . system:anyuser rl
+        fs sa . www:apache rl
+        
+        echo "Deployment complete!"
+        REMOTE_EOF
+        EOF
+        
+        chmod +x deploy.sh
+        ./deploy.sh

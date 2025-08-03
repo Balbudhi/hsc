@@ -1,0 +1,43 @@
+{
+  "name": "mit-hsc-website",
+  "version": "2.0.0",
+  "description": "Official website for the Hindu Student Council of MIT",
+  "main": "public/index.html",
+  "dependencies": {
+    "animejs": "^3.2.1",
+    "chokidar": "^4.0.3",
+    "express": "^4.19.2",
+    "marked": "^15.0.7"
+  },
+  "scripts": {
+    "dev": "webpack --mode=development",
+    "build": "node scripts/enhanced-build.js",
+    "build-old": "node scripts/build.js",
+    "watch": "chokidar \"content/**/*.{md,json}\" -c \"npm run build\"",
+    "start": "node web_scripts/server.js",
+    "deploy": "./scripts/deploy.sh",
+    "deploy:manual": "echo 'SSH to MIT: ssh athena.dialup.mit.edu, then: cd /mit/hsc/www && git pull'"
+  },
+  "keywords": [
+    "MIT",
+    "Hindu Student Council",
+    "HSC",
+    "website",
+    "student organization"
+  ],
+  "author": "MIT Hindu Student Council",
+  "license": "MIT",
+  "devDependencies": {
+    "file-loader": "^6.2.0",
+    "nodemon": "^3.1.9",
+    "postprocessing": "^6.28.5",
+    "three": "^0.143.0",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mit-hsc/website"
+  }
+}
